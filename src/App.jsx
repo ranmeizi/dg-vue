@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import routes from '@/routes'
+import './App.less'
 
 const router = new VueRouter({
   routes
