@@ -1,6 +1,8 @@
 import Vue from 'vue'
 import Component from 'vue-class-component'
 import { R_PSW, R_UNAME, R_CHECKPSW } from '@/utils/Rules'
+import { getAesPsw } from '../../Auth'
+import API from '@/services/API'
 
 @Component
 class Regist extends Vue {
@@ -27,6 +29,18 @@ class Regist extends Vue {
         return false
       }
     });
+    let { uname, psw } = this.ruleForm
+    psw = getAesPsw(psw)
+    API.regist({
+      uname,
+      psw
+    }).then(res => {
+      if (res.data.success) {
+        this.$message.success(res.data.msg);
+      } else {
+        this.$message.error(res.data.msg);
+      }
+    })
   }
   resetForm(formName) {
     this.$refs[formName].resetFields();

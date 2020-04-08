@@ -1,7 +1,8 @@
 import Vue from 'vue'
 import Component from 'vue-class-component'
 import { R_PSW, R_UNAME } from '@/utils/Rules'
-import { doLogin } from '../../Auth'
+import { getAesPsw } from '../../Auth'
+import API from '@/services/API'
 
 @Component
 class Login extends Vue {
@@ -24,8 +25,24 @@ class Login extends Vue {
         return false;
       }
     });
-    const { uname, psw } = this.ruleForm
-    doLogin({ uname, psw })
+    let { uname, psw } = this.ruleForm
+    psw = getAesPsw(psw)
+    API.login({
+      uname,
+      psw
+    }).then(res => {
+      if (res.data.success) {
+        this.$message.success(res.data.msg);
+        // 保存uinfo和token
+        const { token, uinfo } = res.data.data
+        localStorage.setItem('token', token)
+        localStorage.setItem('uinfo', JSON.stringify(uinfo))
+        // 跳转
+        this.$router.push('/')
+      } else {
+        this.$message.error(res.data.msg);
+      }
+    })
   }
   resetForm(formName) {
     this.$refs[formName].resetFields();

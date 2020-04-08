@@ -4,7 +4,11 @@ import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 Vue.use(ElementUI);
 
-new Vue({
-  render: h => <App />,
-}).$mount('#app')
+function creatApp() {
+  console.log(window.MYCONFIG)
+  new Vue({
+    render: h => <App />,
+  }).$mount('#app')
+}
 
+window.onload = creatApp

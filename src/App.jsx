@@ -3,7 +3,7 @@ import VueRouter from 'vue-router'
 import routes from '@/routes'
 import './App.less'
 
-const router = new VueRouter({
+export const router = new VueRouter({
   routes
 })
 Vue.use(VueRouter)

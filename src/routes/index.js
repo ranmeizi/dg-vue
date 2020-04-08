@@ -1,5 +1,6 @@
 import Login from '@/pages/Login'
+import Homepage from '@/pages/Homepage'
 export default [
-  { path: '/', redirect: '/login' },
+  { path: '/', component: Homepage },
   { path: '/login', component: Login },
 ]

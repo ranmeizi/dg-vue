@@ -5,20 +5,20 @@ export default {
     uname,
     psw
   }) {
-    const url = 'v1/player/login'
-    const data = {
+    const url = 'api/player/login'
+    const params = {
       uname,
       psw
     }
     return axios.get(url, {
-      data
+      params
     })
   },
   regist({
     uname,
     psw
   }) {
-    const url = 'v1/player/regist'
+    const url = 'api/player/regist'
     const data = {
       uname,
       psw
