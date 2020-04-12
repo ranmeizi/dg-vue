@@ -2,6 +2,7 @@ import Login from '@/pages/Login'
 import DefaultLayout from '@/pages/layout/Default'
 import Group from '@/pages/Group'
 import User from '@/pages/User'
+import Resource from '@/pages/Resource'
 export default [
   {
     path: '/',
@@ -20,6 +21,13 @@ export default [
           title: '用户管理'
         },
         component: User
+      },
+      {
+        path: '/Resource',
+        meta: {
+          title: '权限管理'
+        },
+        component: Resource
       }
     ]
   },

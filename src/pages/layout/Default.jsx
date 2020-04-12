@@ -13,7 +13,7 @@ class index extends Vue {
     this.$router.go(-1)
   }
   render(h) {
-    return <el-container>
+    return <el-container class='default-layout'>
       <el-header class='default-header' style={{ height: '100px', background: 'red' }}>Header</el-header>
       <el-container style={{ height: 'calc(100vh - 100px)' }}>
         <el-aside class='default-aside' style={{ width: 'initial' }}>

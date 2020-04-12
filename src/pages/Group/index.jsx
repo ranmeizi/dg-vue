@@ -1,105 +1,74 @@
 import Vue from 'vue'
 import Component from 'vue-class-component'
-let id = 1000;
-@Component({
-  watch: {
-    filterText(val) {
-      this.$refs.tree.filter(val);
-    }
-  }
-})
-class index extends Vue {
-  data = [{
-    id: 1,
-    label: '一级 1',
-    children: [{
-      id: 4,
-      label: '二级 1-1',
-      children: [{
-        id: 9,
-        label: '三级 1-1-1'
-      }, {
-        id: 10,
-        label: '三级 1-1-2'
-      }]
-    }]
-  }, {
-    id: 2,
-    label: '一级 2',
-    children: [{
-      id: 5,
-      label: '二级 2-1'
-    }, {
-      id: 6,
-      label: '二级 2-2'
-    }]
-  }, {
-    id: 3,
-    label: '一级 3',
-    children: [{
-      id: 7,
-      label: '二级 3-1'
-    }, {
-      id: 8,
-      label: '二级 3-2'
-    }]
-  }];
-  filterText = ''
-  append(data) {
-    const newChild = { id: id++, label: 'testtest', children: [] };
-    if (!data.children) {
-      this.$set(data, 'children', []);
-    }
-    data.children.push(newChild);
-  }
+import GroupEdit from './edit'
 
-  remove(node, data) {
-    const parent = node.parent;
-    const children = parent.data.children || parent.data;
-    const index = children.findIndex(d => d.id === data.id);
-    children.splice(index, 1);
+@Component
+class index extends Vue {
+  searchInput = ''
+  groups = groups
+  groupId = ''
+  dialogVisible = false
+
+  handleClose() {
+    this.$confirm('确认关闭？')
+      .then(() => {
+        this.dialogVisible = false
+      })
   }
-  filterNode(value, data) {
-    console.log(1)
-    if (!value) return true;
-    return data.label.indexOf(value) !== -1;
-  }
-  renderContent(h, { node, data }) {
-    return (
-      <span class="custom-tree-node">
-        <span>{node.label}</span>
-        <span>
-          <el-button size="mini" type="text" onClick={() => this.append(data)}>Append</el-button>
-          <el-button size="mini" type="text" onClick={() => this.remove(node, data)}>Delete</el-button>
-        </span>
-      </span>);
+  open(groupId = '') {
+    this.groupId = groupId
+    this.dialogVisible = true
   }
   render(h) {
     return <div>
-      {/* 筛选，新增 */}
-      <div>
-        <el-input
-          placeholder="输入关键字进行过滤"
-          v-model={this.filterText}>
-        </el-input>
-        <el-button>添加角色</el-button>
+      {/* 筛选/交互按钮 */}
+      <el-row type='flex' justify='space-between'>
+        <el-col span={6}>
+          <el-input placeholder="请输入内容" v-model={this.searchInput} class="input-with-select">
+            <el-button slot="append" icon="el-icon-search"></el-button>
+          </el-input>
+        </el-col>
+        <el-col span={2}>
+          <el-button type="success" onClick={() => { this.open() }}>新增用户</el-button>
+        </el-col>
+      </el-row>
+      {/* 卡片 */}
+      <div class='flex-row'>
+        {
+          this.groups.map(item => <el-card body-style="{ padding: '0px' }">
+            <img src="https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png" class="image" />
+            <div style="padding: 14px;">
+              <span>{item.name}</span>
+              <div class="bottom clearfix">
+                <time class="time">{item.description}</time>
+                <el-button type="text" class="button">操作按钮</el-button>
+              </div>
+            </div>
+          </el-card>)
+        }
       </div>
-      <el-tree
-        data={this.data}
-        class="filter-tree"
-        // node-key="id"
-        props={{
-          children: 'children',
-          label: 'label'
-        }}
-        ref="tree"
-        default-expand-all
-        filter-node-method={this.filterNode}
-        expand-on-click-node={false}
-        render-content={this.renderContent}>
-      </el-tree>
+      <el-dialog
+        title="提示"
+        destroy-on-close
+        on={{ 'update:dialogVisible': this.dialogVisible }}
+        visible={this.dialogVisible}
+        width="30%"
+        before-close={this.handleClose}
+      >
+        <GroupEdit groupId={this.groupId} />
+      </el-dialog>
     </div>
   }
 }
 
 export default index
+
+const groups = [{
+  gid: 'sssss',
+  name: '管理员',
+  description: '管理员用户'
+}, {
+  gid: 'sssss1',
+  name: '测试用户1',
+  description: '测试用户1'
+}]
